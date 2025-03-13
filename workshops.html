@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Workshops &amp; Events</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ----------------------------------------------------
+       1) CSS Variables for Dark & Light Modes (Aesthetic Dark Mix)
+    ----------------------------------------------------- */
+    :root {
+      --primary-color: #BB86FC;         /* Muted blue */
+      --secondary-color: #5790c5;       /* Lighter blue */
+      --accent-color: #CF6679;          /* Warm coral accent */
+      --header-gradient: linear-gradient(135deg, #1E1E2F, #2A2A3D);
+      --nav-bg: #484876;
+      --container-bg: rgba(36,37,42,0.9);
+      --body-bg: linear-gradient(135deg, #1E1E2F, #12121F);
+      --text-color: #E0E0E0;
+      --card-shadow: 0 6px 12px rgba(0,0,0,0.5);
+      --highlight-color: #BB86FC;
+    }
+    body.light {
+      /* Light Mode: Pastel Ocean */
+      --primary-color: #4A90E2;         /* Fresh blue */
+      --secondary-color: #50E3C2;       /* Cool teal */
+      --accent-color: #F5A623;          /* Vivid orange */
+      --header-gradient: linear-gradient(135deg, #4A90E2, #85e8d2);
+      --nav-bg: #f1f1f1;
+      --container-bg: #e5f5ff;
+      --body-bg: linear-gradient(135deg, #ECF0F1, #FFFFFF);
+      --text-color: #333333;
+      --card-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      --highlight-color: #4A90E2;
+    }
+
+    /* ----------------------------------------------------
+       2) Global Reset & Base Styles
+    ----------------------------------------------------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--body-bg);
+      color: var(--text-color);
+      transition: background 0.7s, color 0.7s;
+      overflow-x: hidden;
+      position: relative;
+    }
+    /* Subtle swirling background shapes */
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      top: -20%;
+      left: -20%;
+      width: 160%;
+      height: 160%;
+      background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 60%);
+      opacity: 0.3;
+      border-radius: 50%;
+      transform: scale(1) rotate(0deg);
+      animation: swirl 30s linear infinite;
+      pointer-events: none;
+      z-index: -999;
+    }
+    @keyframes swirl {
+      0% { transform: scale(1) rotate(0deg); }
+      100% { transform: scale(1) rotate(360deg); }
+    }
+    body.light::before,
+    body.light::after {
+      background: radial-gradient(circle, rgba(0,0,0,0.05), transparent 60%);
+    }
+
+    /* ----------------------------------------------------
+       3) Header
+    ----------------------------------------------------- */
+    header {
+      background: var(--header-gradient);
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      animation: fadeDown 0.8s ease-out;
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .header-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    .header-icons {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .header-icons button,
+    .header-icons a {
+      background: var(--accent-color);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .header-icons button:hover,
+    .header-icons a:hover {
+      background: var(--highlight-color);
+      transform: scale(1.08);
+    }
+    .bell-icon {
+      font-size: 24px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* ----------------------------------------------------
+       4) Navigation
+    ----------------------------------------------------- */
+    nav {
+      background: var(--nav-bg);
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      position: sticky;
+      top: 80px;
+      z-index: 90;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: background 0.5s;
+      animation: fadeIn 1s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    nav a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: background 0.3s, color 0.3s, transform 0.3s;
+      position: relative;
+    }
+    nav a:hover {
+      background: var(--primary-color);
+      color: #fff;
+      transform: translateY(-3px);
+    }
+
+    /* ----------------------------------------------------
+       5) Hero / Featured Workshop Banner
+       "Video-like" banner with overlay text & play button
+    ----------------------------------------------------- */
+    .featured-hero {
+      position: relative;
+      max-width: 1200px;
+      margin: 30px auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      background: var(--container-bg);
+      backdrop-filter: blur(10px);
+      animation: fadeInUp 1s ease-out;
+    }
+    .featured-hero img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: brightness(70%);
+    }
+    .featured-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      text-align: center;
+      max-width: 80%;
+    }
+    .featured-content h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
+    .featured-content p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .play-button {
+      display: inline-block;
+      background: var(--accent-color);
+      padding: 12px 20px;
+      border-radius: 50px;
+      color: #fff;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .play-button:hover {
+      background: var(--highlight-color);
+      transform: scale(1.05);
+    }
+
+    /* ----------------------------------------------------
+       6) Workshop Feed (innovative card-based layout)
+    ----------------------------------------------------- */
+    .workshop-feed {
+      max-width: 1200px;
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 0 20px;
+    }
+    .workshop-item {
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, background 0.3s;
+      color: #333;
+    }
+    body.light .workshop-item {
+      background: #fff;
+      color: #333;
+    }
+    .workshop-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      filter: brightness(80%);
+    }
+    .workshop-body {
+      padding: 15px;
+    }
+    .workshop-body h3 {
+      margin-bottom: 10px;
+      color: var(--primary-color);
+      font-size: 20px;
+    }
+    .workshop-body p {
+      font-size: 16px;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+    .workshop-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .join-button {
+      background: var(--accent-color);
+      color: #fff;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .join-button:hover {
+      background: var(--highlight-color);
+      transform: scale(1.05);
+    }
+    .workshop-item:hover {
+      transform: scale(1.03);
+      background: #f7f7f7;
+    }
+
+    /* ----------------------------------------------------
+       7) Back to Top Button
+    ----------------------------------------------------- */
+    #backToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: var(--card-shadow);
+      display: none;
+      transition: opacity 0.3s, background 0.3s;
+      z-index: 1000;
+    }
+    #backToTop:hover {
+      background: var(--highlight-color);
+    }
+
+    @media (max-width: 992px) {
+      .featured-content h1 {
+        font-size: 28px;
+      }
+      .featured-content p {
+        font-size: 16px;
+      }
+      .workshop-feed {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 768px) {
+      .workshop-feed {
+        grid-template-columns: 1fr;
+      }
+      .featured-content h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-title">Workshops &amp; Events</div>
+    <div class="header-icons">
+      <!-- Dark Mode toggle as Moon Emoji -->
+      <button onclick="toggleDarkMode()">🌙</button>
+      <span class="bell-icon" onclick="showNotifications()">🔔</span>
+      <a href="profile.html">Profile</a>
+    </div>
+  </header>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="ra-positions.html">RA Positions</a>
+    <a href="entrepreneur-openings.html">Entrepreneur Openings</a>
+    <a href="workshops.html">Workshops &amp; Events</a>
+  </nav>
+
+  <!-- HERO: Featured Workshop Banner (video-like) -->
+  <div class="featured-hero">
+    <img src="https://picsum.photos/1200/500?grayscale" alt="Featured Workshop" />
+    <div class="featured-content">
+      <h1>Masterclass: Building Interactive UIs</h1>
+      <p>
+        Learn cutting-edge UI/UX design strategies and code them from scratch in this
+        exclusive workshop. Perfect for front-end enthusiasts.
+      </p>
+      <a href="#" class="play-button">▶ Watch Preview</a>
+    </div>
+  </div>
+
+  <!-- Innovative Workshop Feed -->
+  <div class="workshop-feed">
+    <!-- Workshop Card 1 -->
+    <div class="workshop-item">
+      <img src="https://picsum.photos/300/180?random=1" class="workshop-img" alt="Workshop Image" />
+      <div class="workshop-body">
+        <h3>React Native Basics</h3>
+        <p>Kickstart mobile development with React Native. Build cross-platform apps for iOS &amp; Android.</p>
+        <div class="workshop-footer">
+          <span>May 10, 2025</span>
+          <button class="join-button">Join</button>
+        </div>
+      </div>
+    </div>
+    <!-- Workshop Card 2 -->
+    <div class="workshop-item">
+      <img src="https://picsum.photos/300/180?random=2" class="workshop-img" alt="Workshop Image" />
+      <div class="workshop-body">
+        <h3>Flutter for Beginners</h3>
+        <p>Create stunning mobile UIs using Google’s Flutter framework. No prior experience required.</p>
+        <div class="workshop-footer">
+          <span>May 12, 2025</span>
+          <button class="join-button">Join</button>
+        </div>
+      </div>
+    </div>
+    <!-- Workshop Card 3 -->
+    <div class="workshop-item">
+      <img src="https://picsum.photos/300/180?random=3" class="workshop-img" alt="Workshop Image" />
+      <div class="workshop-body">
+        <h3>AR/VR Immersive Session</h3>
+        <p>Step into augmented and virtual realities to learn the basics of XR development.</p>
+        <div class="workshop-footer">
+          <span>May 15, 2025</span>
+          <button class="join-button">Join</button>
+        </div>
+      </div>
+    </div>
+    <!-- Workshop Card 4 -->
+    <div class="workshop-item">
+      <img src="https://picsum.photos/300/180?random=4" class="workshop-img" alt="Workshop Image" />
+      <div class="workshop-body">
+        <h3>Blockchain Essentials</h3>
+        <p>Understand the fundamentals of blockchain, smart contracts, and decentralized apps.</p>
+        <div class="workshop-footer">
+          <span>May 20, 2025</span>
+          <button class="join-button">Join</button>
+        </div>
+      </div>
+    </div>
+    <!-- Workshop Card 5 -->
+    <div class="workshop-item">
+      <img src="https://picsum.photos/300/180?random=5" class="workshop-img" alt="Workshop Image" />
+      <div class="workshop-body">
+        <h3>Google Cloud Crash Course</h3>
+        <p>Spin up servers, deploy containers, and handle big data in the cloud with GCP.</p>
+        <div class="workshop-footer">
+          <span>May 25, 2025</span>
+          <button class="join-button">Join</button>
+        </div>
+      </div>
+    </div>
+    <!-- Workshop Card 6 -->
+    <div class="workshop-item">
+      <img src="https://picsum.photos/300/180?random=6" class="workshop-img" alt="Workshop Image" />
+      <div class="workshop-body">
+        <h3>AI Chatbot Development</h3>
+        <p>Build your own AI-driven chatbot using popular NLP frameworks and APIs.</p>
+        <div class="workshop-footer">
+          <span>May 30, 2025</span>
+          <button class="join-button">Join</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACK TO TOP BUTTON -->
+  <button id="backToTop" onclick="scrollToTop()">&#8679;</button>
+
+  <script>
+    /************************************************
+     * 1) Dark Mode Toggle
+     ************************************************/
+    function toggleDarkMode() {
+      document.body.classList.toggle('light');
+    }
+
+    /************************************************
+     * 2) Notifications
+     ************************************************/
+    function showNotifications() {
+      alert('No new notifications');
+    }
+
+    /************************************************
+     * 3) Back to Top
+     ************************************************/
+    const backToTopBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      backToTopBtn.style.display = window.pageYOffset > 300 ? 'block' : 'none';
+    });
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

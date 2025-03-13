@@ -1,2 +1,2 @@
-# BeUnited
-Project for Design Thinking &amp; Innovation (CSET210P)
+# DTI
+Repository for DTI Project at Bennett University
