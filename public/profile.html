@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile | Be United</title>
+  <style>
+    :root {
+      --primary-color: #BB86FC;
+      --secondary-color: #5790c5;
+      --accent-color: #CF6679;
+      --header-gradient: linear-gradient(135deg, #1E1E2F, #2A2A3D);
+      --nav-bg: #484876;
+      --container-bg: rgba(36,37,42,0.9);
+      --body-bg: linear-gradient(135deg, #1E1E2F, #12121F);
+      --text-color: #E0E0E0;
+      --card-shadow: 0 6px 12px rgba(0,0,0,0.5);
+      --highlight-color: #BB86FC;
+    }
+
+    body.light {
+      --primary-color: #4A90E2;
+      --secondary-color: #50E3C2;
+      --accent-color: #F5A623;
+      --header-gradient: linear-gradient(135deg, #4A90E2, #85e8d2);
+      --nav-bg: #f1f1f1;
+      --container-bg: #e5f5ff;
+      --body-bg: linear-gradient(135deg, #ECF0F1, #FFFFFF);
+      --text-color: #333333;
+      --card-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      --highlight-color: #4A90E2;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--body-bg);
+      color: var(--text-color);
+      transition: all 0.4s ease;
+    }
+
+    header {
+      background: var(--header-gradient);
+      color: var(--text-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--card-shadow);
+    }
+
+    .header-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .header-icons {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .header-icons button {
+      background: none;
+      color: var(--text-color);
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    nav {
+      background-color: var(--nav-bg);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0.8rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    nav a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--container-bg);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--highlight-color);
+    }
+
+    .profile-info p {
+      font-size: 1.1rem;
+      margin: 0.8rem 0;
+    }
+
+    .logout-btn {
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .logout-btn:hover {
+      opacity: 0.85;
+    }
+
+    .bell-icon {
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-title">BeUnited</div>
+    <div class="header-icons">
+      <button onclick="toggleDarkMode()" id="themeToggle">🌙</button>
+      <span class="bell-icon" onclick="showNotifications()">🔔</span>
+      <a href="profile.html">Profile</a>
+    </div>
+  </header>
+
+  <nav>
+    <a href="./index.html">Clubs &amp; Chapters</a>
+    <a href="./ra-positions.html">Research &amp; Projects</a>
+    <a href="./entrepreneur-openings.html">Startup &amp; Internships</a>
+    <a href="./workshops.html">Workshops &amp; Events</a>
+  </nav>
+
+  <div class="container">
+    <h1 id="profileTitle">User Profile</h1>
+    <div class="profile-info" id="profileContent">
+      <!-- Filled dynamically -->
+    </div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light');
+      document.getElementById('themeToggle').textContent = '☀️';
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('light');
+      const isLight = document.body.classList.contains('light');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
+    }
+
+    function showNotifications() {
+      alert("You have no new notifications 📬");
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+
+    const student = JSON.parse(localStorage.getItem('studentData'));
+    const moderator = JSON.parse(localStorage.getItem('moderatorData'));
+
+    const title = document.getElementById('profileTitle');
+    const content = document.getElementById('profileContent');
+
+    if (student) {
+      title.textContent = 'Student Profile';
+      content.innerHTML = `
+        <p><strong>Name:</strong> ${student.name}</p>
+        <p><strong>Email:</strong> ${student.email}</p>
+        <p><strong>University:</strong> ${student.university}</p>
+        <p><strong>Year:</strong> ${student.year}</p>
+        <p><strong>Resume URL:</strong> <a href="${student.resumeURL}" target="_blank">View Resume</a></p>
+      `;
+    } else if (moderator) {
+      title.textContent = 'Moderator Profile';
+      content.innerHTML = `
+        <p><strong>Name:</strong> ${moderator.name}</p>
+        <p><strong>Email:</strong> ${moderator.email}</p>
+        <p><strong>Department:</strong> ${moderator.department}</p>
+        <p><strong>Designation:</strong> ${moderator.designation}</p>
+      `;
+    } else {
+      alert('Please login first');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>
