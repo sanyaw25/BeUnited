@@ -107,6 +107,7 @@
 
         const userData = role === 'student' ? data.student : data.moderator;
         localStorage.setItem(role + 'Data', JSON.stringify(userData));
+        localStorage.setItem('role', role); // Store user role
         window.location.href = role === 'student' ? 'student-profile.html' : 'mod-profile.html';
       } catch (err) {
         console.error(err);

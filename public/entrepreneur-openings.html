@@ -3,749 +3,526 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Internships</title>
+  <title>Entrepreneur Openings | Be United</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder@1.3.3/dist/use.min.js"></script>
   <style>
-    /* ----------------------------------------------------
-       1) CSS Variables for Dark & Light Modes (Aesthetic Dark Mix)
-    ----------------------------------------------------- */
+    /* ===== Variables & Resets ===== */
     :root {
-      /* Default: Dark Mode */
-      --primary-color: #BB86FC;         /* Muted blue */
-      --secondary-color: #5790c5;       /* Lighter blue */
-      --accent-color: #CF6679;          /* Warm coral accent */
-      --header-gradient: linear-gradient(135deg, #1E1E2F, #2A2A3D);
-      --nav-bg: #484876;
-      --container-bg: rgba(36,37,42,0.9);
-      --body-bg: linear-gradient(135deg, #1E1E2F, #12121F);
-      --text-color: #E0E0E0;
-      --card-shadow: 0 6px 12px rgba(0,0,0,0.5);
-      --highlight-color: #BB86FC;
+      --primary: #BB86FC; --secondary: #5790c5; --accent: #CF6679;
+      --header-grad: linear-gradient(135deg,#1E1E2F,#2A2A3D);
+      --nav-bg: #484876; --card-bg: rgba(36,37,42,0.9);
+      --body-bg: linear-gradient(135deg,#1E1E2F,#12121F);
+      --text: #E0E0E0; --shadow: 0 6px 12px rgba(0,0,0,0.5);
+      --highlight: #BB86FC;
     }
     body.light {
-      /* Light Mode: Pastel Ocean */
-      --primary-color: #4A90E2;         /* Fresh blue */
-      --secondary-color: #50E3C2;       /* Cool teal */
-      --accent-color: #F5A623;          /* Vivid orange */
-      --header-gradient: linear-gradient(135deg, #4A90E2, #85e8d2);
-      --nav-bg: #f1f1f1;
-      --container-bg: #e5f5ff;
-      --body-bg: linear-gradient(135deg, #ECF0F1, #FFFFFF);
-      --text-color: #333333;
-      --card-shadow: 0 6px 12px rgba(0,0,0,0.1);
-      --highlight-color: #4A90E2;
+      --primary: #4A90E2; --secondary: #50E3C2; --accent: #F5A623;
+      --header-grad: linear-gradient(135deg,#4A90E2,#85e8d2);
+      --nav-bg: #f1f1f1; --card-bg: #e5f5ff;
+      --body-bg: linear-gradient(135deg,#ECF0F1,#FFF);
+      --text: #333; --shadow: 0 6px 12px rgba(0,0,0,0.1);
+      --highlight: #4A90E2;
     }
-
-    /* ----------------------------------------------------
-       2) Global Reset & Base Styles
-    ----------------------------------------------------- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: 'Roboto', sans-serif;
-      background: var(--body-bg);
-      color: var(--text-color);
-      transition: background 0.7s, color 0.7s;
-      overflow-x: hidden;
-      position: relative;
+      font-family:'Roboto',sans-serif;
+      background:var(--body-bg);
+      color:var(--text);
+      transition:background .7s,color .7s;
+      overflow-x:hidden;
     }
-    /* Subtle swirling background shapes */
-    body::before,
-    body::after {
-      content: '';
-      position: fixed;
-      top: -20%;
-      left: -20%;
-      width: 160%;
-      height: 160%;
-      background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 60%);
-      opacity: 0.3;
-      border-radius: 50%;
-      transform: scale(1) rotate(0deg);
-      animation: swirl 30s linear infinite;
-      pointer-events: none;
-      z-index: -999;
-    }
-    @keyframes swirl {
-      0% { transform: scale(1) rotate(0deg); }
-      100% { transform: scale(1) rotate(360deg); }
-    }
-    body.light::before,
-    body.light::after {
-      background: radial-gradient(circle, rgba(0,0,0,0.05), transparent 60%);
-    }
-
-    /* ----------------------------------------------------
-       3) Header
-    ----------------------------------------------------- */
+    /* ===== Header & Nav ===== */
     header {
-      background: var(--header-gradient);
-      padding: 20px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      animation: fadeDown 0.8s ease-out;
+      position:sticky; top:0; z-index:100;
+      background:var(--header-grad); padding:20px 30px;
+      display:flex; justify-content:space-between; align-items:center;
+      box-shadow:0 4px 10px rgba(0,0,0,.3);
+      animation:fadeDown .8s ease-out;
     }
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-20px);} to{opacity:1;} }
+    .header-title { font-size:32px; font-weight:700; color:#fff; text-shadow:1px1px3px rgba(0,0,0,.3); }
+    .header-icons { display:flex; gap:15px; align-items:center; }
+    .header-icons button, .header-icons a {
+      background:var(--accent); color:#fff; padding:10px 20px; border-radius:20px;
+      border:none; cursor:pointer; font-weight:500; text-decoration:none;
+      transition:transform .3s,background .3s;
     }
-    .header-title {
-      font-size: 32px;
-      font-weight: 700;
-      color: #fff;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    .header-icons button:hover, .header-icons a:hover {
+      background:var(--highlight); transform:scale(1.08);
     }
-    .header-icons {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
-    .header-icons button,
-    .header-icons a {
-      background: var(--accent-color);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: 500;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.3s, background 0.3s;
-    }
-    .header-icons button:hover,
-    .header-icons a:hover {
-      background: var(--highlight-color);
-      transform: scale(1.08);
-    }
-    .bell-icon {
-      font-size: 24px;
-      cursor: pointer;
-      padding: 8px;
-    }
-
-    /* ----------------------------------------------------
-       4) Navigation
-    ----------------------------------------------------- */
+    .bell-icon { font-size:24px; cursor:pointer; padding:8px; }
     nav {
-      background: var(--nav-bg);
-      padding: 15px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      position: sticky;
-      top: 80px;
-      z-index: 90;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: background 0.5s;
-      animation: fadeIn 1s ease-out;
+      position:sticky; top:80px; z-index:90;
+      background:var(--nav-bg); padding:15px;
+      display:flex; justify-content:center; gap:20px;
+      box-shadow:0 4px 6px rgba(0,0,0,.1);
+      animation:fadeIn 1s ease-out;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
     nav a {
-      color: var(--primary-color);
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: 500;
-      padding: 10px 20px;
-      border-radius: 8px;
-      transition: background 0.3s, color 0.3s, transform 0.3s;
-      position: relative;
+      color:var(--primary); text-decoration:none; font-size:18px; font-weight:500;
+      padding:10px 20px; border-radius:8px;
+      transition:background .3s,color .3s,transform .3s;
     }
-    nav a:hover {
-      background: var(--primary-color);
-      color: #fff;
-      transform: translateY(-3px);
-    }
-
-    /* ----------------------------------------------------
-       5) Hero Section with Search & Quick Options
-    ----------------------------------------------------- */
+    nav a:hover { background:var(--primary); color:#fff; transform:translateY(-3px); }
+    nav a.active { background:var(--primary); color:#fff; }
+    /* ===== Hero & Search ===== */
     .hero-section {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 30px 20px;
-      background: var(--container-bg);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      box-shadow: var(--card-shadow);
-      animation: containerFade 0.8s ease-out;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      position: relative;
+      max-width:1200px; margin:30px auto; padding:30px 20px;
+      background:var(--card-bg); backdrop-filter:blur(10px);
+      border-radius:20px; box-shadow:var(--shadow);
+      animation:containerFade .8s ease-out;
+      display:flex; flex-direction:column; gap:20px;
     }
-    @keyframes containerFade {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .hero-title {
-      font-size: 28px;
-      color: var(--primary-color);
-      text-align: center;
-      margin-bottom: 10px;
-    }
+    @keyframes containerFade { from{opacity:0;transform:translateY(20px);} to{opacity:1;} }
+    .hero-title { font-size:28px; color:var(--primary); text-align:center; }
     .search-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #fff;
-      padding: 10px 20px;
-      border-radius: 15px;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
-    }
-    body.light .search-bar {
-      background: #fff;
-      color: #333;
+      display:flex; gap:10px; background:#fff; padding:10px 20px;
+      border-radius:15px; box-shadow:inset 0 2px 6px rgba(0,0,0,.3);
     }
     .search-bar input {
-      flex: 1;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      background: transparent;
+      flex:1; border:none; outline:none; font-size:16px; background:transparent;
     }
     .search-bar button {
-      background: var(--accent-color);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 20px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
+      background:var(--accent); color:#fff; border:none; border-radius:10px;
+      padding:10px 20px; font-weight:500; cursor:pointer;
+      transition:background .3s,transform .3s;
     }
-    .search-bar button:hover {
-      background: var(--highlight-color);
-      transform: scale(1.05);
+    .search-bar button:hover { background:var(--highlight); transform:scale(1.05); }
+    .toggle-buttons {
+      display:flex; gap:15px; justify-content:center;
     }
-    .quick-actions {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
+    .toggle-buttons button {
+      background:var(--accent); color:#fff; padding:12px 24px;
+      border:none; border-radius:20px; font-weight:500; cursor:pointer;
+      transition:background .3s,transform .3s;
     }
-    .quick-actions a {
-      background: var(--accent-color);
-      color: #fff;
-      padding: 12px 24px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.3s, transform 0.3s;
+    .toggle-buttons button.active {
+      background:var(--primary); transform:scale(1.05);
     }
-    .quick-actions a:hover {
-      background: var(--highlight-color);
-      transform: scale(1.05);
-    }
-
-    /* ----------------------------------------------------
-       6) Category Selector (horizontal scroll / icons)
-    ----------------------------------------------------- */
-    .category-section {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-    .category-title {
-      font-size: 24px;
-      color: var(--primary-color);
-      margin-bottom: 15px;
-      text-align: center;
-    }
+    .toggle-buttons button:hover { background:var(--highlight); transform:scale(1.05); }
+    /* ===== Categories ===== */
+    .category-section { max-width:1200px; margin:30px auto; padding:0 20px; }
+    .category-title { font-size:24px; color:var(--primary); text-align:center; margin-bottom:15px; }
     .category-scroll {
-      display: flex;
-      gap: 15px;
-      overflow-x: auto;
-      padding-bottom: 10px;
+      display:flex; gap:15px; overflow-x:auto; padding-bottom:10px;
     }
     .category-card {
-      min-width: 150px;
-      background: #fff;
-      color: #333;
-      padding: 15px;
-      border-radius: 15px;
-      box-shadow: var(--card-shadow);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.3s, background 0.3s;
+      flex:0 0 auto; min-width:140px; background:#fff; color:#333; padding:15px;
+      border-radius:15px; box-shadow:var(--shadow);
+      display:flex; flex-direction:column; align-items:center;
+      cursor:pointer; transition:transform .3s,background .3s;
     }
-    body.light .category-card {
-      background: #fff;
-      color: #333;
-    }
-    .category-icon {
-      font-size: 40px;
-      margin-bottom: 10px;
-      color: var(--primary-color);
-    }
-    .category-name {
-      font-size: 16px;
-      font-weight: 500;
-      text-align: center;
-    }
-    .category-card:hover {
-      transform: scale(1.05);
-      background: #f7f7f7;
-    }
-
-    /* ----------------------------------------------------
-       7) Featured Internships Grid
-    ----------------------------------------------------- */
+    .category-card:hover { transform:scale(1.05); background:#f0f0f0; }
+    .category-card.active { background:var(--primary); color:#fff; }
+    .category-icon { font-size:32px; margin-bottom:8px; }
+    .category-name { font-size:14px; font-weight:500; text-align:center; }
+    /* ===== Internships Grid ===== */
     .internship-section {
-        max-width: 1200px;
-        margin: 30px auto;
-        padding: 20px;
-        background: var(--container-bg);
-        border-radius: 20px;
-        box-shadow: var(--card-shadow);
-        animation: containerFade 0.8s ease-out;
-        backdrop-filter: blur(10px);
+      max-width:1200px; margin:30px auto; padding:20px;
+      background:var(--card-bg); border-radius:20px;
+      box-shadow:var(--shadow); animation:containerFade .8s ease-out;
+      backdrop-filter:blur(10px);
     }
     .internship-section h2 {
-        font-size: 28px;
-        color: var(--primary-color);
-        text-align: center;
-        margin-bottom: 20px;
+      font-size:28px; color:var(--primary); text-align:center; cursor:pointer;
     }
     .internship-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+      gap:20px; margin-top:20px;
     }
     .internship-card {
-        background: var(--light-bg, #fff);
-        color: #5e5c5c;
-        border-radius: 15px;
-        box-shadow: var(--card-shadow);
-        overflow: hidden;
-        transition: transform 0.3s, background 0.3s;
-        display: flex;
-        flex-direction: column;
-        min-height: 250px;
-        padding: 15px;
+      background:#fff; color:#333; padding:15px; border-radius:15px;
+      box-shadow:var(--shadow); display:flex; flex-direction:column;
+      transition:transform .3s; min-height:280px;
     }
-    .internship-card h3 {
-        margin-bottom: 10px;
-        font-weight: bolder;
-        font-family: inherit;
-        font-size: xx-large;
-        }
-
-    body.dark .internship-card {
-        background: var(--dark-card-bg, #222);
-        color: var(--light-text, #312e2e);
-    }
-    .internship-card:hover {
-        transform: scale(1.02);
-        background: var(--hover-bg, #f7f7f7);
-    }
-    .internship-logo {
-        width: 100%;
-        height: 150px;
-        object-fit: cover;
-        filter: brightness(85%);
-    }
-    .internship-body {
-        padding: 15px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-    .internship-body h3 {
-        font-size: 20px;
-        margin-bottom: 10px;
-        color: var(--primary-color);
-    }
-    .internship-body p {
-        font-size: 16px;
-        margin-bottom: 10px;
-        flex-grow: 1;
-    }
-    .roles-container {
-        margin-top: 12px;
-        margin-bottom: 12px;
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--primary-color, #444);
-    }
-
-    .roles-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        padding: 0;
-        margin-top: 5px;
-        list-style: none;
-    }
-
+    .internship-card:hover { transform:scale(1.02); }
+    .internship-card h3 { margin-bottom:10px; font-size:24px; }
+    .roles-container { margin:12px 0; font-size:14px; font-weight:600; color:var(--primary); }
+    .roles-list { display:flex; flex-wrap:wrap; gap:6px; list-style:none; padding:0; margin-top:5px; }
     .role-badge {
-        display: inline-block;
-        background: linear-gradient(135deg, var(--accent-color, #4CAF50), var(--primary-color, #007bff));
-        color: white;
-        padding: 8px 14px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-        text-transform: capitalize;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-        transition: transform 0.2s ease-in-out;
+      background:linear-gradient(135deg,var(--accent),var(--primary)); color:#fff;
+      padding:8px 14px; border-radius:20px; font-size:12px; font-weight:700;
+      transition:transform .2s;
     }
-
-    .role-badge:hover {
-        transform: scale(1.1);
+    .role-badge:hover { transform:scale(1.1); }
+    .internship-footer {
+      margin-top:auto; display:flex; gap:8px; justify-content:space-between; align-items:center;
     }
-
-    
-
-  .internship-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px;
-        margin-top: auto; 
+    .learn-more-btn, .apply-btn {
+      flex:1; text-align:center; padding:8px 16px; border-radius:8px;
+      font-weight:500; cursor:pointer; text-decoration:none;
+      transition:background .3s,transform .3s;
     }
-    .learn-more-btn,
-    .apply-btn {
-        flex: 1;
-        text-align: center;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background 0.3s, transform 0.3s;
-        text-decoration: none;
+    .learn-more-btn { background:var(--secondary); color:#fff; }
+    .learn-more-btn:hover { background:var(--highlight); transform:scale(1.05); }
+    .apply-btn { background:var(--accent); color:#fff; }
+    .apply-btn:hover { background:var(--highlight); transform:scale(1.05); }
+    /* ===== Modal ===== */
+    .modal {
+      display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,.7); z-index:1000;
     }
-
-    .learn-more-btn {
-        background: var(--secondary-color, #ddd);
-        color: white;
-        margin-right: 8px;
+    .modal-content {
+      background:var(--card-bg); margin:5% auto; padding:20px;
+      width:80%; max-width:600px; border-radius:15px;
+      animation:slideIn .3s ease-out; position:relative; backdrop-filter:blur(10px);
     }
-
-    .apply-btn {
-        background: var(--accent-color);
-        color: white;
+    @keyframes slideIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;} }
+    .close-btn {
+      position:absolute; top:10px; right:10px; width:24px; height:24px;
+      background:#ff4444; color:#fff; border:none; border-radius:50%;
+      font-size:16px; cursor:pointer; text-align:center; line-height:24px;
     }
-
-    .learn-more-btn:hover {
-        background: var(--highlight-color, #ccc);
-        transform: scale(1.05);
+    .details-content h2 { color:var(--primary); margin-bottom:15px; }
+    .details-content p { margin-bottom:10px; line-height:1.5; }
+    .details-content ul { list-style:none; padding-left:20px; margin:10px 0; }
+    .details-content ul li { position:relative; padding-left:15px; margin:5px 0; }
+    .details-content ul li:before {
+      content:'•'; position:absolute; left:0; color:var(--primary);
     }
-
-    .apply-btn:hover {
-        background: var(--highlight-color);
-        transform: scale(1.05);
+    .details-content a {
+      display:inline-block; margin-top:15px;
+      background:var(--accent); color:#fff; padding:8px 16px; border-radius:20px;
+      text-decoration:none; transition:background .3s;
     }
-
-  /* ********************************************************* */
-
-  /* ************************************************************ */
-
-    /* ----------------------------------------------------
-       8) CTA Section (Upload Resume, Register, etc.)
-    ----------------------------------------------------- */
+    .details-content a:hover { background:var(--highlight); }
+    /* ===== CTA & Back to Top ===== */
     .cta-section {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 30px 20px;
-      background: var(--container-bg);
-      border-radius: 20px;
-      box-shadow: var(--card-shadow);
-      animation: containerFade 0.8s ease-out;
-      text-align: center;
-      backdrop-filter: blur(10px);
+      max-width:1200px; margin:30px auto; padding:30px 20px;
+      background:var(--card-bg); border-radius:20px;
+      box-shadow:var(--shadow); backdrop-filter:blur(10px);
+      text-align:center; animation:containerFade .8s ease-out;
     }
-    .cta-section h2 {
-      font-size: 26px;
-      color: var(--primary-color);
-      margin-bottom: 15px;
-    }
-    .cta-section p {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-    .cta-buttons {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-    }
+    .cta-section h2 { font-size:26px; color:var(--primary); margin-bottom:15px; }
+    .cta-section p { font-size:18px; margin-bottom:20px; }
+    .cta-buttons { display:flex; gap:20px; justify-content:center; }
     .cta-buttons a {
-      background: var(--accent-color);
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.3s, transform 0.3s;
+      background:var(--accent); color:#fff; padding:14px 28px; border-radius:20px;
+      text-decoration:none; font-weight:500;
+      transition:background .3s,transform .3s;
     }
-    .cta-buttons a:hover {
-      background: var(--highlight-color);
-      transform: scale(1.05);
-    }
-
-    /* ----------------------------------------------------
-       9) Back to Top Button
-    ----------------------------------------------------- */
+    .cta-buttons a:hover { background:var(--highlight); transform:scale(1.05); }
     #backToTop {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: var(--primary-color);
-      color: #fff;
-      border: none;
-      padding: 15px;
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: var(--card-shadow);
-      display: none;
-      transition: opacity 0.3s, background 0.3s;
-      z-index: 1000;
+      position:fixed; bottom:30px; right:30px; width:48px; height:48px;
+      background:var(--primary); color:#fff; border:none; border-radius:50%;
+      cursor:pointer; box-shadow:var(--shadow); display:none;
+      transition:background .3s; z-index:1000;
     }
-    #backToTop:hover {
-      background: var(--highlight-color);
-    }
-
-    @keyframes fadeUp {
-      to { opacity: 1; }
-    }
-    @media (max-width: 992px) {
-      .hero-section {
-        text-align: center;
-      }
-      .search-bar {
-        flex-direction: column;
-        gap: 10px;
-      }
-      .internship-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    @media (max-width: 768px) {
-      .internship-grid {
-        grid-template-columns: 1fr;
-      }
-      .category-scroll {
-        flex-wrap: nowrap;
-      }
-    }
-
-
-
+    #backToTop:hover { background:var(--highlight); }
+    @media(max-width:992px){ .internship-grid{grid-template-columns:1fr 1fr;} }
+    @media(max-width:768px){ .internship-grid{grid-template-columns:1fr;} }
   </style>
 </head>
 <body>
-  <!-- HEADER -->
   <header>
-    <div class="header-title">Internships</div>
+    <div class="header-title">Entrepreneur Openings</div>
     <div class="header-icons">
-      <!-- Dark Mode toggle as Moon Emoji -->
       <button onclick="toggleDarkMode()">🌙</button>
       <span class="bell-icon" onclick="showNotifications()">🔔</span>
       <a href="public.html">Profile</a>
     </div>
   </header>
 
-  <!-- NAVIGATION -->
   <nav>
-    <a href="index.html">Clubs &amp; Chapters</a>
-    <a href="ra-positions.html">Research &amp; Projects</a>
-    <a href="entrepreneur-openings.html">Startup &amp; Internships</a>
-    <a href="workshops.html">Workshops &amp; Events</a>
+    <a href="./index.html">Clubs &amp; Chapters</a>
+    <a href="./ra-positions.html">Research &amp; Projects</a>
+    <a href="./entrepreneur-openings.html">Startup &amp; Internships</a>
+    <a href="./workshops.html">Workshops &amp; Events</a>
   </nav>
 
-  <!-- HERO: Search and Quick Options -->
   <div class="hero-section">
     <h2 class="hero-title">Find Your Perfect Internship</h2>
     <div class="search-bar">
-      <input type="text" placeholder="Search by role, company, or location...">
-      <button>Search</button>
+      <input type="text" id="search-input" placeholder="Search by Title, Tagline, or Skills…" />
+      <button id="search-btn">Search Jobs</button>
     </div>
-    <div class="quick-actions">
-      <a href="#featured">Featured Internships</a>
-      <a href="#upload">Upload Resume</a>
-      <a href="#register">Register for Alerts</a>
-    </div>
+    <div class="toggle-buttons">
+      <button id="all-internships" class="active" onclick="toggleView('all')">All Internships</button>
+      <button id="recommended-internships" onclick="toggleView('recommended')">Recommended Internships</button>
     </div>
   </div>
 
-  <!-- Category Selector (Machine Learning, Cybersecurity, etc.) -->
   <div class="category-section">
     <h3 class="category-title">Explore by Category</h3>
     <div class="category-scroll">
-      <!-- Each category card has an icon + label -->
-      <div class="category-card">
-        <div class="category-icon">🤖</div>
-        <div class="category-name">Machine Learning</div>
-      </div>
-      <div class="category-card">
-        <div class="category-icon">🔐</div>
-        <div class="category-name">Cybersecurity</div>
-      </div>
-      <div class="category-card">
-        <div class="category-icon">💻</div>
-        <div class="category-name">Web Dev</div>
-      </div>
-      <div class="category-card">
-        <div class="category-icon">📱</div>
-        <div class="category-name">Mobile Dev</div>
-      </div>
-      <div class="category-card">
-        <div class="category-icon">🎨</div>
-        <div class="category-name">UI/UX Design</div>
-      </div>
-      <div class="category-card">
-        <div class="category-icon">☁️</div>
-        <div class="category-name">Cloud Computing</div>
-      </div>
-      <div class="category-card">
-        <div class="category-icon">🛡️</div>
-        <div class="category-name">Blockchain</div>
-      </div>
-      <div class="category-card">
-        <div class="category-icon">📊</div>
-        <div class="category-name">Data Science</div>
-      </div>
+      <div class="category-card" data-category="Web Dev"><div class="category-icon">💻</div><div class="category-name">Web Dev</div></div>
+      <div class="category-card" data-category="Mobile Dev"><div class="category-icon">📱</div><div class="category-name">Mobile Dev</div></div>
+      <div class="category-card" data-category="UI/UX Design"><div class="category-icon">🎨</div><div class="category-name">UI/UX Design</div></div>
+      <div class="category-card" data-category="Marketing"><div class="category-icon">📣</div><div class="category-name">Marketing</div></div>
+      <div class="category-card" data-category="Content Creation"><div class="category-icon">✍</div><div class="category-name">Content Creation</div></div>
+      <div class="category-card" data-category="Data Science"><div class="category-icon">📊</div><div class="category-name">Data Science</div></div>
+      <div class="category-card" data-category="DevOps"><div class="category-icon">⚙️</div><div class="category-name">DevOps</div></div>
+      <div class="category-card" data-category="QA"><div class="category-icon">✅</div><div class="category-name">Quality Assurance</div></div>
+      <div class="category-card" data-category="Project Management"><div class="category-icon">📋</div><div class="category-name">Project Mgmt</div></div>
+      <div class="category-card" data-category="Cybersecurity"><div class="category-icon">🔒</div><div class="category-name">Cybersecurity</div></div>
     </div>
   </div>
+
   <div class="internship-section">
-    <h2>Featured Internships</h2>
+    <h2 id="internship-title">Featured Internships</h2>
     <div id="internships-list" class="internship-grid"></div>
-<!-- **************************************************************************** -->
-    
- <!-- **************************************************************************** -->
-    
-</div>
+  </div>
 
+  <div id="details-modal" class="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeDetailsModal()">×</button>
+      <div id="modal-content" class="details-content"></div>
+    </div>
+  </div>
 
-  <!-- CTA Section: Encourage Resume Upload, etc. -->
   <div class="cta-section">
     <h2>Ready to Take the Next Step?</h2>
     <p>Upload your resume or register to stay ahead in the internship hunt.</p>
     <div class="cta-buttons">
-      <a href="#">Upload Resume</a>
+      <a href="public.html">Upload Resume</a>
       <a href="#">Register Now</a>
     </div>
   </div>
 
-  <!-- BACK TO TOP BUTTON -->
-  <button id="backToTop" onclick="scrollToTop()">&#8679;</button>
+  <button id="backToTop" onclick="scrollToTop()">⇧</button>
 
   <script>
-      
-      /************************************************
-       * 0) Display Internships from Json file
-       ************************************************/
-
-// **************************************************************************************
-      document.addEventListener("DOMContentLoaded", function () { 
+    let allInternships = [];
+    let viewMode = 'all';
+    let useModel = null;
+    let currentDisplayed = [];
+  
+    const categoryKeywords = {
+      "Web Dev":       ["web","frontend","backend","full stack","html","css","javascript","react","next.js"],
+      "Mobile Dev":    ["mobile","ios","android","app","flutter","react native"],
+      "UI/UX Design":  ["ui","ux","design","interface","prototyping","graphic design"],
+      "Marketing":     ["marketing","social media","digital marketing","growth","sales"],
+      "Content Creation":["content","writer","video editor","photography"],
+      "Data Science":  ["data","machine learning","python","statistics","ai","tensorflow","pandas"],
+      "DevOps":        ["devops","docker","kubernetes","ci/cd","aws","azure","automation","jenkins"],
+      "QA":            ["qa","testing","selenium","automation","manual testing","quality assurance"],
+      "Project Management":["project","management","scrum","kanban","agile","planning","jira"],
+      "Cybersecurity": ["security","cyber","encryption","network security","penetration"]
+    };
+  
+    // maps individual skills to categories they imply
+    const skillCategoryMap = {
+      python:              ['Web Dev','Data Science'],
+      html:                ['Web Dev'],
+      css:                 ['Web Dev'],
+      javascript:          ['Web Dev'],
+      react:               ['Web Dev'],
+      'next.js':           ['Web Dev'],
+      mobile:              ['Mobile Dev'],
+      ios:                 ['Mobile Dev'],
+      android:             ['Mobile Dev'],
+      ui:                  ['UI/UX Design'],
+      ux:                  ['UI/UX Design'],
+      design:              ['UI/UX Design'],
+      marketing:           ['Marketing'],
+      'social media':      ['Marketing'],
+      content:             ['Content Creation'],
+      writer:              ['Content Creation'],
+      'video editor':      ['Content Creation'],
+      photography:         ['Content Creation'],
+      'machine learning':  ['Data Science'],
+      data:                ['Data Science'],
+      ai:                  ['Data Science'],
+      docker:              ['DevOps'],
+      kubernetes:          ['DevOps'],
+      devops:              ['DevOps'],
+      qa:                  ['QA'],
+      testing:             ['QA'],
+      scrum:               ['Project Management'],
+      agile:               ['Project Management'],
+      security:            ['Cybersecurity']
+      // add more mappings as needed
+    };
+  
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Dark mode
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('light');
+      }
+      // Load USE model
+      try {
+        useModel = await use.load();
+      } catch {
+        useModel = null;
+      }
+      // Fetch internships
       fetch("internships.json")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(data => {
-            const internshipsContainer = document.getElementById("internships-list");
-            internshipsContainer.innerHTML = ""; // Clear existing content
-  
-            data.forEach(internship => {
-                const card = document.createElement("div");
-                card.classList.add("internship-card");
-  
-                // Ensure "roles" exists and is an array
-                const rolesHTML = Array.isArray(internship.roles) 
-                  ? internship.roles.map(role => `<li class="role-badge">${role}</li>`).join("")
-                  : "";
-  
-                card.innerHTML = `
-                    <h3>${internship.title}</h3>
-                    <p><strong></strong> ${internship.tagline}</p>
-                    <div class="roles-container">
-                        <strong>Roles:</strong>
-                        <ul class="roles-list">${rolesHTML}</ul>
-                    </div>
-                    
-                    <p><strong>Compensation:</strong> ${internship.Compensation}</p>
-  
-                    <div class="internship-footer">
-                        <a href="#" class="learn-more-btn" data-title="${internship.title}" 
-                           data-tagline="${internship.tagline}" data-roles='${JSON.stringify(internship.roles)}' 
-                           data-compensation="${internship.Compensation}" 
-                           data-duration="${internship.Duration}" 
-                           data-description="${internship.description}" 
-                           data-requirements="${internship.Requirements}" 
-                           data-link="${internship.link}">
-                           Learn More
-                        </a>
-                        <a href="${internship.link}" target="_blank" class="apply-btn">Apply Now</a>
-                    </div>
-                `;
-  
-                internshipsContainer.appendChild(card);
-            });
+          const modPosts = JSON.parse(localStorage.getItem('modInternships') || '[]');
+          allInternships = [...modPosts, ...data];
 
-});
-
-
-// ***************************************************************************************
-
-
-    /************************************************
-     * 1) Dark Mode Toggle with Local Storage
-     ************************************************/
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    if (localStorage.getItem('darkMode') === 'enabled') {
-        document.body.classList.add('dark-mode');
-    }
-    
-    darkModeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', 
-            document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+          
+          displayInternships(allInternships);
+        })
+        .catch(() => {
+          document.getElementById("internships-list").innerHTML = "<p>Error loading internships.</p>";
+        });
+  
+      // Search setup
+      const si = document.getElementById("search-input"),
+            sb = document.getElementById("search-btn");
+      const debounce = (fn, ms) => {
+        let t;
+        return (...args) => {
+          clearTimeout(t);
+          t = setTimeout(() => fn(...args), ms);
+        };
+      };
+      sb.addEventListener("click", () => filterInternships(si.value));
+      si.addEventListener("input", debounce(() => filterInternships(si.value), 300));
+  
+      // Category clicks
+      document.querySelectorAll('.category-card').forEach(card => {
+        card.addEventListener('click', () => {
+          document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          filterByCategory(card.dataset.category);
+        });
+      });
     });
-
-    /************************************************
-     * 2) Notifications
-     ************************************************/
+  
+    async function toggleView(mode) {
+      viewMode = mode;
+      document.getElementById("all-internships").classList.toggle("active", mode === 'all');
+      document.getElementById("recommended-internships").classList.toggle("active", mode === 'recommended');
+      document.getElementById("internship-title").textContent =
+        mode === 'recommended' ? 'Recommended Internships' : 'Featured Internships';
+      document.getElementById("search-input").value = '';
+      document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+  
+      const list = mode === 'recommended'
+        ? await getRecommendedInternships()
+        : allInternships;
+      displayInternships(list);
+    }
+  
+    async function getRecommendedInternships() {
+      // 1) load raw skills
+      const skills = JSON.parse(localStorage.getItem('studentSkills') || '[]');
+      if (!skills.length) return allInternships;
+  
+      // 2) build keyword set from skills + implied categories
+      const kwSet = new Set();
+      skills.forEach(raw => {
+        const s = raw.trim().toLowerCase();
+        // include raw skill
+        kwSet.add(s);
+        // include all keywords of any implied category
+        (skillCategoryMap[s] || []).forEach(cat => {
+          (categoryKeywords[cat] || []).forEach(k => kwSet.add(k));
+        });
+      });
+      const keywords = Array.from(kwSet);
+  
+      // 3) filter internships whose roles mention any keyword
+      return allInternships.filter(i =>
+        i.roles.some(role =>
+          keywords.some(k => role.toLowerCase().includes(k))
+        )
+      );
+    }
+  
+    function displayInternships(arr) {
+      currentDisplayed = arr;
+      const c = document.getElementById("internships-list");
+      if (!arr.length) {
+        c.innerHTML = "<p>No internships found.</p>";
+        return;
+      }
+      c.innerHTML = arr.map((it, idx) => `
+        <div class="internship-card">
+          <h3>${it.title}</h3>
+          <p>${it.tagline}</p>
+          <div class="roles-container"><strong>Roles:</strong>
+            <ul class="roles-list">
+              ${it.roles.map(r => `<li class="role-badge">${r}</li>`).join('')}
+            </ul>
+          </div>
+          <p><strong>Compensation:</strong> ${it.Compensation}</p>
+          <div class="internship-footer">
+            <a href="#" class="learn-more-btn" data-index="${idx}">Learn More</a>
+            <a href="${it.link==='TBD'? '#': it.link}" target="_blank" class="apply-btn"
+               ${it.link==='TBD'? `onclick="alert('Application link not available yet')"`: ''}>
+              Apply Now
+            </a>
+          </div>
+        </div>`).join('');
+      document.querySelectorAll('.learn-more-btn').forEach(b => {
+        b.addEventListener('click', e => {
+          e.preventDefault();
+          showDetailsModal(parseInt(b.dataset.index));
+        });
+      });
+    }
+  
+    function filterInternships(q) {
+      const base = viewMode === 'recommended'
+        ? getRecommendedInternships()
+        : allInternships;
+      Promise.resolve(base).then(arr => {
+        const f = arr.filter(i =>
+          i.title.toLowerCase().includes(q.toLowerCase()) ||
+          i.tagline.toLowerCase().includes(q.toLowerCase()) ||
+          i.roles.some(r => r.toLowerCase().includes(q.toLowerCase()))
+        );
+        displayInternships(f);
+      });
+    }
+  
+    function filterByCategory(cat) {
+      const keys = categoryKeywords[cat] || [];
+      const base = viewMode === 'recommended'
+        ? getRecommendedInternships()
+        : allInternships;
+      Promise.resolve(base).then(arr => {
+        const f = arr.filter(i =>
+          i.roles.some(r =>
+            keys.some(k => r.toLowerCase().includes(k))
+          )
+        );
+        displayInternships(f);
+      });
+    }
+  
+    function showDetailsModal(idx) {
+      const it = currentDisplayed[idx];
+      const m = document.getElementById("details-modal");
+      document.getElementById("modal-content").innerHTML = `
+        <h2>${it.title}</h2>
+        <p><strong>Tagline:</strong> ${it.tagline}</p>
+        <p>${it.description}</p>
+        <p><strong>Roles:</strong> ${it.roles.join(', ')}</p>
+        <p><strong>Compensation:</strong> ${it.Compensation}</p>
+        <a href="${it.link}" target="_blank" class="apply-btn">Apply Now</a>
+      `;
+      m.style.display = 'block';
+    }
+    function closeDetailsModal() {
+      document.getElementById("details-modal").style.display = 'none';
+    }
+  
+    function toggleDarkMode() {
+      document.body.classList.toggle('light');
+      localStorage.setItem(
+        'darkMode',
+        document.body.classList.contains('light') ? 'enabled' : 'disabled'
+      );
+    }
     function showNotifications() {
       alert('No new notifications');
     }
-
-    /************************************************
-     * 3) Back to Top Button Fix
-     ************************************************/
-    const backToTopBtn = document.getElementById('backToTop');
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 300) {
-        backToTopBtn.style.display = 'block';
-      } else {
-        backToTopBtn.style.display = 'none';
-      }
+      document.getElementById('backToTop').style.display =
+        window.pageYOffset > 300 ? 'block' : 'none';
     });
-
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-});
-
-
-
-
-
-
-
   </script>
+  
 </body>
 </html>

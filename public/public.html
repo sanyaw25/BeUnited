@@ -125,7 +125,7 @@
 </head>
 <body>
   <header>
-    <div class="header-title">BeUnited</div>
+    <div class="header-title">Be United</div>
     <div class="header-icons">
       <button onclick="toggleDarkMode()" id="themeToggle">🌙</button>
       <span class="bell-icon" onclick="showNotifications()">🔔</span>
@@ -143,65 +143,30 @@
   <div class="container">
     <h1 id="profileTitle">User Profile</h1>
     <div class="profile-info" id="profileContent">
-      <!-- Filled dynamically -->
+      <!-- Profile data will be filled here -->
     </div>
     <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
-
   <script>
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-      document.body.classList.add('light');
-      document.getElementById('themeToggle').textContent = '☀️';
-    }
+    window.onload = function() {
+      const role = localStorage.getItem('role'); // Get the user's role from localStorage
 
-    function toggleDarkMode() {
-      document.body.classList.toggle('light');
-      const isLight = document.body.classList.contains('light');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-      document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
-    }
+      if (!role) {
+        alert('Please login first');
+        window.location.href = 'login.html'; // Redirect if not logged in
+        return;
+      }
 
-    function showNotifications() {
-      alert("You have no new notifications 📬");
-    }
-
-    function logout() {
-      localStorage.clear();
-      window.location.href = 'login.html';
-    }
-
-    // Check if student or moderator data is in localStorage
-    const student = JSON.parse(localStorage.getItem('studentData'));
-    const moderator = JSON.parse(localStorage.getItem('moderatorData'));
-
-    console.log(student); // For debugging
-    console.log(moderator); // For debugging
-
-    const title = document.getElementById('profileTitle');
-    const content = document.getElementById('profileContent');
-
-    if (student) {
-      title.textContent = 'Student Profile';
-      content.innerHTML = `
-        <p><strong>Name:</strong> ${student.name}</p>
-        <p><strong>Email:</strong> ${student.email}</p>
-        <p><strong>University:</strong> ${student.university}</p>
-        <p><strong>Year:</strong> ${student.year}</p>
-        <p><strong>Resume URL:</strong> <a href="${student.resumeURL}" target="_blank">View Resume</a></p>
-      `;
-    } else if (moderator) {
-      title.textContent = 'Moderator Profile';
-      content.innerHTML = `
-        <p><strong>Name:</strong> ${moderator.name}</p>
-        <p><strong>Email:</strong> ${moderator.email}</p>
-        <p><strong>Department:</strong> ${moderator.department}</p>
-        <p><strong>Designation:</strong> ${moderator.designation}</p>
-      `;
-    } else {
-      alert('Please login first');
-      window.location.href = 'login.html';
-    }
+      // Redirect to the appropriate profile page based on the role
+      if (role === 'student') {
+        window.location.href = 'student-profile.html'; // Redirect to student profile page
+      } else if (role === 'moderator') {
+        window.location.href = 'mod-profile.html'; // Redirect to moderator profile page
+      } else {
+        alert('Invalid role');
+        window.location.href = 'login.html'; // Redirect if the role is not recognized
+      }
+    };
   </script>
 </body>
 </html>

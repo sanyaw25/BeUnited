@@ -338,7 +338,7 @@
       <!-- Dark Mode toggle as Moon Emoji -->
       <button onclick="toggleDarkMode()">🌙</button>
       <span class="bell-icon" onclick="showNotifications()">🔔</span>
-      <a href="profile.html">Profile</a>
+      <a href="public.html">Profile</a>
     </div>
   </header>
 
@@ -457,6 +457,12 @@
     function showNotifications() {
       alert('No new notifications');
     }
+    document.querySelectorAll('.join-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const workshopTitle = button.closest('.workshop-item').querySelector('h3').textContent;
+        alert(`You have joined the "${workshopTitle}" workshop!`);
+      });
+    });
 
     /************************************************
      * 3) Back to Top

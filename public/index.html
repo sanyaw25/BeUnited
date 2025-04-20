@@ -836,6 +836,22 @@
       text-align: center;
       box-shadow: 0 8px 16px rgba(0,0,0,0.3);
     }
+    .chat-btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+    
+    .chat-btn:hover {
+      background-color: var(--accent-color);
+    }
+    
   </style>
 </head>
 <body>
@@ -850,7 +866,6 @@
       <button onclick="toggleDarkMode()">🌙</button>
       <span class="bell-icon" onclick="showNotifications()">🔔</span>
       <a href="public.html">Profile</a>
-      <button class="focus-btn" onclick="toggleFocus()">Focus Mode</button>
       <button onclick="openFeedback()">Feedback</button>
     </div>
   </header>
@@ -921,7 +936,7 @@
     </div>
     <!-- Registration Form for "Join Our Student Community" -->
     <div class="explore-box">
-      <h3>Be a part of our student community!</h3>
+      <h3>Register for student help!</h3>
       <p>Register Now</p>
       <form class="explore-form" onsubmit="event.preventDefault(); registerUser();">
         <label for="name">Name</label>
@@ -954,48 +969,36 @@
             <h3>AI &amp; ML Bootcamp</h3>
             <p>Learn from experts.</p>
             <div class="share-buttons">
-              <button>FB</button>
-              <button>TW</button>
             </div>
           </div>
           <div class="post-card">
             <h3>GDG Applications Open</h3>
             <p>Apply to the team of your choice.</p>
             <div class="share-buttons">
-              <button>FB</button>
-              <button>TW</button>
             </div>
           </div>
           <div class="post-card">
             <h3>Google Solution Challenge</h3>
             <p>Register now!</p>
             <div class="share-buttons">
-              <button>FB</button>
-              <button>TW</button>
             </div>
           </div>
           <div class="post-card">
             <h3>Hacktoberfest 2025</h3>
             <p>Join open-source contributors worldwide.</p>
             <div class="share-buttons">
-              <button>FB</button>
-              <button>TW</button>
             </div>
           </div>
           <div class="post-card">
             <h3>Startup Pitch Night</h3>
             <p>Present your ideas.</p>
             <div class="share-buttons">
-              <button>FB</button>
-              <button>TW</button>
             </div>
           </div>
           <div class="post-card">
             <h3>Design Sprint Workshop</h3>
             <p>Innovate and design.</p>
             <div class="share-buttons">
-              <button>FB</button>
-              <button>TW</button>
             </div>
           </div>
         </div>
@@ -1356,24 +1359,55 @@
     /************************************************
      * 10) Chatbot (Requires Registration)
      ************************************************/
-    function toggleChat() {
+     function toggleChat() {
       const widget = document.getElementById("chatWidget");
       widget.classList.toggle("open");
     }
-    function sendChat(e) {
-      if (e.key === "Enter") {
-        const input = e.target.value.trim();
-        if (!input) return;
-        const chatBody = document.getElementById("chatBody");
+    function sendChat(event) {
+      if (event.key === "Enter") {
+        const inputBox = event.target;
+        const message = inputBox.value.trim();
+        if (!message) return;
+    
         if (!userRegistered) {
-          chatBody.innerHTML += `<p>Chatbot: You must register first to chat!</p>`;
-        } else {
-          const avatar = avatarUrls[userAvatarIndex];
-          chatBody.innerHTML += `<p><img src="${avatar}" style="border-radius:50%; vertical-align:middle; margin-right:5px;"/> You: ${input}</p>`;
-          chatBody.innerHTML += `<p>Chatbot: Great question! Our community will help you out soon.</p>`;
+          alert("Please register first to use the chatbot.");
+          return;
         }
-        e.target.value = "";
-        chatBody.scrollTop = chatBody.scrollHeight;
+    
+        handlePrompt(message);
+        inputBox.value = "";
+      }
+    }
+        
+     
+
+    function handlePrompt(question) {
+      const chatBody = document.getElementById("chatBody");
+      const avatar = avatarUrls[userAvatarIndex];
+  
+      chatBody.innerHTML += `
+        <p><img src="${avatar}" style="border-radius:50%; vertical-align:middle; margin-right:5px;"/> You: ${question}</p>
+      `;
+  
+      const botResponse = getChatbotResponse(question.toLowerCase());
+      chatBody.innerHTML += `<p>Chatbot: ${botResponse}</p>`;
+  
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+  
+    function getChatbotResponse(input) {
+      if (input.includes("post an internship")) {
+        return "To post an internship, log in as a moderator and use the form on your profile. It will automatically show in the internships section.";
+      } else if (input.includes("report")) {
+        return "You can report a post using the report flag icon or notify the admin with details. We take moderation seriously.";
+      } else if (input.includes("spam")) {
+        return "Flag spam posts immediately or reach out to a moderator. We will review and take appropriate action.";
+      } else if (input.includes("delete")) {
+        return "To delete your post, go to your profile, scroll to your posts, and click the 🗑️ icon next to the one you want to remove.";
+      } else if (input.includes("login")) {
+        return "Make sure your email and password are correct. If you’ve forgotten your password, use the reset link on the login page.";
+      } else {
+        return "Hmm, I’m not sure about that yet 🤖. Please type your full question or reach out to support.";
       }
     }
 
@@ -1402,7 +1436,7 @@
       alert("Thank you for your feedback!");
       closeFeedback();
     });
-
+ 
     /* Simulated Notification after page load & Chart Initialization */
     window.addEventListener("DOMContentLoaded", () => {
       const chartCanvas = document.getElementById("startupChart");
