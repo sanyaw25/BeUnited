@@ -2,529 +2,409 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Research &amp; Faculty Projects</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeUnited - Research & Projects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* ----------------------------------------------------
-       1) CSS Variables for Dark & Light Modes (Aesthetic Dark Mix)
-    ----------------------------------------------------- */
     :root {
-      --primary-color: #BB86FC;         /* Muted blue */
-      --secondary-color: #5790c5;       /* Lighter blue */
-      --accent-color: #CF6679;          /* Warm coral accent */
-      --header-gradient: linear-gradient(135deg, #1E1E2F, #2A2A3D);
-      --nav-bg: #484876;
-      --container-bg: rgba(36,37,42,0.9);
-      --body-bg: linear-gradient(135deg, #1E1E2F, #12121F);
-      --text-color: #E0E0E0;
-      --card-shadow: 0 6px 12px rgba(0,0,0,0.5);
-      --highlight-color: #BB86FC;
-    }
-    body.light {
-      /* Light Mode: Pastel Ocean */
-      --primary-color: #4A90E2;         /* Fresh blue */
-      --secondary-color: #50E3C2;       /* Cool teal */
-      --accent-color: #F5A623;          /* Vivid orange */
-      --header-gradient: linear-gradient(135deg, #4A90E2, #85e8d2);
-      --nav-bg: #f1f1f1;
-      --container-bg: #e5f5ff;
-      --body-bg: linear-gradient(135deg, #ECF0F1, #FFFFFF);
-      --text-color: #333333;
-      --card-shadow: 0 6px 12px rgba(0,0,0,0.1);
-      --highlight-color: #4A90E2;
-    }
-
-    /* ----------------------------------------------------
-       2) Global Reset & Base Styles
-    ----------------------------------------------------- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      --bg-dark: #1e1e2f;
+      --bg-light: #f7f7fb;
+      --card-bg-light: #ffffff;
+      --card-bg-dark: #2b2b45;
+      --accent: #c94f7c;
+      --text-dark: #1e1e2f;
+      --text-light: #ffffff;
+      --highlight: #9b5de5;
+      --transition-speed: 0.3s;
     }
     body {
-      font-family: 'Roboto', sans-serif;
-      background: var(--body-bg);
-      color: var(--text-color);
-      transition: background 0.7s, color 0.7s;
-      overflow-x: hidden;
-      position: relative;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      transition: background var(--transition-speed), color var(--transition-speed);
     }
-    /* Subtle swirling background shapes */
-    body::before,
-    body::after {
-      content: '';
-      position: fixed;
-      top: -20%;
-      left: -20%;
-      width: 160%;
-      height: 160%;
-      background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 60%);
-      opacity: 0.3;
-      border-radius: 50%;
-      transform: scale(1) rotate(0deg);
-      animation: swirl 30s linear infinite;
-      pointer-events: none;
-      z-index: -999;
+    body.dark {
+      background: var(--bg-light);
+      color: var(--text-dark);
     }
-    @keyframes swirl {
-      0% { transform: scale(1) rotate(0deg); }
-      100% { transform: scale(1) rotate(360deg); }
+    body.dark .card, body.dark .box {
+      background: var(--card-bg-light);
+      color: var(--text-dark);
     }
-    body.light::before,
-    body.light::after {
-      background: radial-gradient(circle, rgba(0,0,0,0.05), transparent 60%);
-    }
-
-    /* ----------------------------------------------------
-       3) Header
-    ----------------------------------------------------- */
     header {
-      background: var(--header-gradient);
-      padding: 20px 30px;
+      background: #212133;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      animation: fadeDown 0.8s ease-out;
-    }
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
     .header-title {
-      font-size: 32px;
-      font-weight: 700;
+      font-size: 1.8rem;
+      font-weight: bold;
       color: #fff;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-    }
-    .header-icons {
-      display: flex;
-      gap: 15px;
-      align-items: center;
     }
     .header-icons button,
-    .header-icons a {
-      background: var(--accent-color);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: 500;
+    .header-icons a,
+    .header-icons span {
+      background: var(--accent);
       border: none;
+      border-radius: 12px;
+      padding: 0.5rem 1rem;
+      margin-left: 0.5rem;
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
       cursor: pointer;
-      transition: transform 0.3s, background 0.3s;
+      transition: background var(--transition-speed);
     }
     .header-icons button:hover,
-    .header-icons a:hover {
-      background: var(--highlight-color);
-      transform: scale(1.08);
+    .header-icons a:hover,
+    .header-icons span:hover {
+      background: var(--highlight);
     }
-    .bell-icon {
-      font-size: 24px;
-      cursor: pointer;
-      padding: 8px;
-    }
-
-    /* ----------------------------------------------------
-       4) Navigation
-    ----------------------------------------------------- */
     nav {
-      background: var(--nav-bg);
-      padding: 15px;
       display: flex;
       justify-content: center;
-      gap: 20px;
-      position: sticky;
-      top: 80px;
-      z-index: 90;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: background 0.5s;
-      animation: fadeIn 1s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      gap: 3rem;
+      padding: 1rem;
+      background: #474574;
     }
     nav a {
-      color: var(--primary-color);
+      color: var(--highlight);
       text-decoration: none;
-      font-size: 18px;
-      font-weight: 500;
-      padding: 10px 20px;
-      border-radius: 8px;
-      transition: background 0.3s, color 0.3s, transform 0.3s;
-      position: relative;
+      font-weight: 600;
+      transition: color var(--transition-speed);
     }
     nav a:hover {
-      background: var(--primary-color);
-      color: #fff;
-      transform: translateY(-3px);
+      color: var(--accent);
     }
-
-    /* ----------------------------------------------------
-       5) Hero Section (with big heading + subheading)
-    ----------------------------------------------------- */
-    .hero {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 40px 20px;
-      background: var(--container-bg);
-      border-radius: 20px;
-      box-shadow: var(--card-shadow);
+    /* Search Bar */
+    #search-bar {
+      margin: 1.5rem auto;
+      display: block;
+      width: 60%;
+      max-width: 500px;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 2px solid var(--highlight);
+      transition: border-color var(--transition-speed);
+    }
+    #search-bar:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    /* Section styling */
+    .section {
+      padding: 3rem 2rem;
+    }
+    .section h2 {
       text-align: center;
-      animation: containerFade 0.8s ease-out;
-      backdrop-filter: blur(10px);
+      color: var(--highlight);
+      margin-bottom: 2rem;
     }
-    @keyframes containerFade {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .hero h1 {
-      font-size: 36px;
-      color: var(--primary-color);
-      margin-bottom: 10px;
-    }
-    .hero p {
-      font-size: 18px;
-      line-height: 1.6;
-      max-width: 800px;
-      margin: 0 auto 20px auto;
-    }
-    .hero-btns {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    .hero-btns a {
-      background: var(--accent-color);
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .hero-btns a:hover {
-      background: var(--highlight-color);
-      transform: scale(1.05);
-    }
-
-    /* ----------------------------------------------------
-       6) Curated Gallery of Projects / Startups
-    ----------------------------------------------------- */
-    .gallery-section {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 20px;
-    }
-    .gallery-title {
-      font-size: 28px;
-      color: var(--primary-color);
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .gallery-grid {
+    /* Card-style boxes */
+    .cards-container,
+    .boxes-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
     }
-    .gallery-item {
-      background: #fff;
+    .card, .box {
+      background: var(--card-bg-dark);
       border-radius: 15px;
-      box-shadow: var(--card-shadow);
       overflow: hidden;
-      transition: transform 0.3s, background 0.3s;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
       display: flex;
       flex-direction: column;
-      color: #333;
+      transition: transform var(--transition-speed), box-shadow var(--transition-speed);
     }
-    body.light .gallery-item {
-      background: #fff;
-      color: #333;
+    .card:hover, .box:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
-    .gallery-img {
+    .card img, .box img {
       width: 100%;
       height: 180px;
       object-fit: cover;
-      filter: brightness(85%);
     }
-    .gallery-content {
-      padding: 15px;
-      flex: 1;
+    .card-content, .box-content {
+      padding: 1rem;
     }
-    .gallery-content h3 {
-      font-size: 20px;
-      margin-bottom: 10px;
-      color: var(--primary-color);
+    .card-content h3, .box-content h3 {
+      color: var(--highlight);
+      margin-bottom: 0.5rem;
     }
-    .gallery-content p {
-      font-size: 16px;
-      margin-bottom: 15px;
-      line-height: 1.4;
+    .card-content p, .box-content p {
+      margin: 0.5rem 0;
     }
-    .gallery-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 15px 15px;
+    .tag {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-top: 0.5rem;
     }
-    .detail-btn {
-      background: var(--accent-color);
+    .view-btn {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
       color: #fff;
-      padding: 8px 16px;
       border: none;
       border-radius: 10px;
-      font-weight: 500;
       cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
+      font-weight: 600;
+      transition: background var(--transition-speed);
     }
-    .detail-btn:hover {
-      background: var(--highlight-color);
-      transform: scale(1.05);
+    .view-btn:hover {
+      background: var(--highlight);
     }
-    .gallery-item:hover {
-      transform: scale(1.03);
-      background: #f7f7f7;
-    }
-
-    /* ----------------------------------------------------
-       7) Additional CTA or Info Section
-    ----------------------------------------------------- */
-    .info-section {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 30px 20px;
-      background: var(--container-bg);
-      border-radius: 20px;
-      box-shadow: var(--card-shadow);
-      animation: containerFade 0.8s ease-out;
-      text-align: center;
-      backdrop-filter: blur(10px);
-    }
-    .info-section h2 {
-      font-size: 26px;
-      color: var(--primary-color);
-      margin-bottom: 15px;
-    }
-    .info-section p {
-      font-size: 18px;
-      margin-bottom: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .info-btns {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-    }
-    .info-btns a {
-      background: var(--accent-color);
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .info-btns a:hover {
-      background: var(--highlight-color);
-      transform: scale(1.05);
-    }
-
-    /* ----------------------------------------------------
-       8) Back to Top Button
-    ----------------------------------------------------- */
-    #backToTop {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: var(--primary-color);
-      color: #fff;
-      border: none;
-      padding: 15px;
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: var(--card-shadow);
+    /* Modal styling */
+    .modal {
       display: none;
-      transition: opacity 0.3s, background 0.3s;
+      position: fixed;
       z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
     }
-    #backToTop:hover {
-      background: var(--highlight-color);
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 2rem;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 15px;
+      color: #000;
     }
-
-    @media (max-width: 992px) {
-      .hero h1 {
-        font-size: 28px;
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: #000;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      #search-bar {
+        width: 80%;
       }
-      .gallery-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    @media (max-width: 768px) {
-      .gallery-grid {
-        grid-template-columns: 1fr;
+      nav {
+        flex-direction: column;
+        gap: 1rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- HEADER -->
+  <!-- Header -->
   <header>
-    <div class="header-title">Research &amp; Faculty Projects</div>
+    <div class="header-title">BeUnited</div>
     <div class="header-icons">
       <button onclick="toggleDarkMode()">🌙</button>
-      <span class="bell-icon" onclick="showNotifications()">🔔</span>
+      <span onclick="showNotifications()">🔔</span>
       <a href="profile.html">Profile</a>
     </div>
   </header>
-
-  <!-- NAVIGATION -->
+  
+  <!-- Navigation -->
   <nav>
-    <a href="index.html">Home</a>
-    <a href="ra-positions.html">RA Positions</a>
-    <a href="entrepreneur-openings.html">Entrepreneur Openings</a>
-    <a href="workshops.html">Workshops &amp; Events</a>
+    <a href="./index.html">Clubs &amp; Chapters</a>
+    <a href="./ra-positions.html">Research &amp; Projects</a>
+    <a href="./entrepreneur-openings.html">Startup &amp; Internships</a>
+    <a href="./workshops.html">Workshops &amp; Events</a>
   </nav>
-
-  <!-- HERO SECTION -->
-  <div class="hero">
-    <h1>Collaborate &amp; Innovate</h1>
-    <p>
-      Explore groundbreaking research projects and faculty-led initiatives. From AI-driven solutions to sustainable
-      engineering, our collaborations shape the future. Join us in pushing the boundaries of knowledge.
-    </p>
-    <div class="hero-btns">
-      <a href="#">Browse All Projects</a>
-      <a href="#">Join as a Collaborator</a>
-    </div>
-  </div>
-
-  <!-- GALLERY OF PROJECTS / STARTUPS -->
-  <section class="gallery-section">
-    <h2 class="gallery-title">Featured Projects</h2>
-    <div class="gallery-grid">
-      <!-- Card 1 -->
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?random=1" alt="Project" class="gallery-img"/>
-        <div class="gallery-content">
-          <h3>Robotics &amp; AI Lab</h3>
-          <p>Advancing humanoid robotics with real-time decision-making and deep reinforcement learning.</p>
-        </div>
-        <div class="gallery-footer">
-          <span>Mech &amp; AI Dept.</span>
-          <button class="detail-btn">View Details</button>
+  
+  <!-- Search Bar -->
+  <input type="text" id="search-bar" placeholder="Search research, events, skills..." onkeyup="filterCards()" />
+  
+  <!-- Opportunities Within University Section -->
+  <section class="section" id="university">
+    <h2>Opportunities Within University</h2>
+    <div class="cards-container">
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=1" alt="AI Lab" />
+        <div class="card-content">
+          <h3>AI & Robotics Lab</h3>
+          <p>Cutting-edge research on autonomous systems and reinforcement learning.</p>
+          <div class="tag">Mech & AI Dept.</div>
+          <button class="view-btn" onclick="openDetails(this)">View Details</button>
         </div>
       </div>
-      <!-- Card 2 -->
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?random=2" alt="Project" class="gallery-img"/>
-        <div class="gallery-content">
-          <h3>CyberSec Initiative</h3>
-          <p>Novel encryption techniques and secure architectures for next-gen IoT devices.</p>
-        </div>
-        <div class="gallery-footer">
-          <span>Comp Sci Dept.</span>
-          <button class="detail-btn">View Details</button>
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=2" alt="CyberSec" />
+        <div class="card-content">
+          <h3>Cybersecurity Research</h3>
+          <p>Building secure network architectures with next-gen encryption models.</p>
+          <div class="tag">Comp Sci Dept.</div>
+          <button class="view-btn" onclick="openDetails(this)">View Details</button>
         </div>
       </div>
-      <!-- Card 3 -->
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?random=3" alt="Project" class="gallery-img"/>
-        <div class="gallery-content">
-          <h3>Eco Power Solutions</h3>
-          <p>Research on renewable energy grids and efficient battery storage systems for a greener tomorrow.</p>
-        </div>
-        <div class="gallery-footer">
-          <span>Energy &amp; Env Dept.</span>
-          <button class="detail-btn">View Details</button>
-        </div>
-      </div>
-      <!-- Card 4 -->
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?random=4" alt="Project" class="gallery-img"/>
-        <div class="gallery-content">
-          <h3>NeuroTech Initiative</h3>
-          <p>Brain-computer interfaces for advanced prosthetics and mental health diagnostics.</p>
-        </div>
-        <div class="gallery-footer">
-          <span>BioMed Dept.</span>
-          <button class="detail-btn">View Details</button>
-        </div>
-      </div>
-      <!-- Card 5 -->
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?random=5" alt="Project" class="gallery-img"/>
-        <div class="gallery-content">
-          <h3>Smart City Innovations</h3>
-          <p>IoT-based traffic management and real-time environmental monitoring for urban sustainability.</p>
-        </div>
-        <div class="gallery-footer">
-          <span>Urban Dev Dept.</span>
-          <button class="detail-btn">View Details</button>
-        </div>
-      </div>
-      <!-- Card 6 -->
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?random=6" alt="Project" class="gallery-img"/>
-        <div class="gallery-content">
-          <h3>Quantum Computing</h3>
-          <p>Exploring qubit entanglement and quantum algorithms for cryptography and data processing.</p>
-        </div>
-        <div class="gallery-footer">
-          <span>Physics Dept.</span>
-          <button class="detail-btn">View Details</button>
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=11" alt="Quantum" />
+        <div class="card-content">
+          <h3>Quantum Computing Lab</h3>
+          <p>Explore qubit modeling and optimization algorithms.</p>
+          <div class="tag">Physics Dept.</div>
+          <button class="view-btn" onclick="openDetails(this)">View Details</button>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- Info or CTA Section -->
-  <div class="info-section">
-    <h2>Ready to Collaborate?</h2>
-    <p>
-      Join our research community, partner with faculty, and bring your innovative ideas to life.
-      Secure funding, publish findings, and make a global impact.
-    </p>
-    <div class="info-btns">
-      <a href="#">Partner with Us</a>
-      <a href="#">Request Funding</a>
+  
+  <!-- External Projects & Industry Collabs Section -->
+  <section class="section" id="external">
+    <h2>External Projects & Industry Collabs</h2>
+    <div class="cards-container">
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=3" alt="Tata Collab" />
+        <div class="card-content">
+          <h3>Tata Energy Collaboration</h3>
+          <p>Working with Tata Power to improve urban energy grid efficiency.</p>
+          <div class="tag">Energy Systems</div>
+          <button class="view-btn" onclick="openDetails(this)">View Details</button>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=4" alt="NASA Project" />
+        <div class="card-content">
+          <h3>NASA Student Research</h3>
+          <p>Climate modeling and satellite data processing with NASA guidance.</p>
+          <div class="tag">Earth & Space Science</div>
+          <button class="view-btn" onclick="openDetails(this)">View Details</button>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=12" alt="Intel AI" />
+        <div class="card-content">
+          <h3>Intel AI Internship</h3>
+          <p>Join Intel for machine learning deployment and neural network optimization.</p>
+          <div class="tag">Industry Partner</div>
+          <button class="view-btn" onclick="openDetails(this)">View Details</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Skill-Based Recommendations Section -->
+  <section class="section" id="recommendations">
+    <h2>Skill-Based Recommendations</h2>
+    <div class="cards-container">
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=5" alt="ML Research" />
+        <div class="card-content">
+          <h3>Machine Learning Lab</h3>
+          <p>For students with Python, NumPy & Scikit-learn experience.</p>
+          <div class="tag">AI Skill Alignment</div>
+          <button class="view-btn" onclick="openDetails(this)">View Details</button>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=6" alt="UI/UX" />
+        <div class="card-content">
+          <h3>Design & UX Research</h3>
+          <p>Projects in accessibility, usability testing, and user behavior analysis.</p>
+          <div class="tag">Figma, UI/UX</div>
+          <button class="view-btn" onclick="openDetails(this)">View Details</button>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=13" alt="Blockchain" />
+        <div class="card-content">
+          <h3>Blockchain Innovation Group</h3>
+          <p>Hands-on experience with Solidity, DeFi systems, and smart contracts.</p>
+          <div class="tag">Blockchain Dev</div>
+          <button class="view-btn" onclick="openDetails(this)">View Details</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Hackathons Section (Reworked from Upcoming Events) -->
+  <section class="section" id="hackathons">
+    <h2>Hackathons</h2>
+    <div class="boxes-container">
+      <div class="box">
+        <div class="box-content">
+          <h3>Global Hackathon Challenge</h3>
+          <p><strong>Date:</strong> March 15, 2025<br><strong>Time:</strong> 10:00 AM</p>
+          <p>Join a 48-hour global challenge where innovative minds build creative tech solutions.</p>
+          <button class="view-btn" onclick="openDetails(this)">Join Now</button>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box-content">
+          <h3>AI & Robotics Hack</h3>
+          <p><strong>Date:</strong> April 5, 2025<br><strong>Time:</strong> 2:00 PM</p>
+          <p>Compete in a hackathon focusing on AI advancements, robotics innovation, and automation.</p>
+          <button class="view-btn" onclick="openDetails(this)">Join Now</button>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box-content">
+          <h3>VR Innovation Hack</h3>
+          <p><strong>Date:</strong> May 10, 2025<br><strong>Time:</strong> 11:00 AM</p>
+          <p>Create immersive virtual reality experiences in this tech-forward hackathon.</p>
+          <button class="view-btn" onclick="openDetails(this)">Join Now</button>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box-content">
+          <h3>Mobile App Challenge</h3>
+          <p><strong>Date:</strong> June 20, 2025<br><strong>Time:</strong> 9:00 AM</p>
+          <p>Develop the next big mobile innovation in this fast-paced coding event.</p>
+          <button class="view-btn" onclick="openDetails(this)">Join Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Modal for Details/Read More -->
+  <div id="detailsModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modalDetails"></div>
     </div>
   </div>
-
-  <!-- BACK TO TOP BUTTON -->
-  <button id="backToTop" onclick="scrollToTop()">&#8679;</button>
-
+  
+  <!-- Scripts -->
   <script>
-    /************************************************
-     * 1) Dark Mode Toggle
-     ************************************************/
+    // Toggle Dark Mode
     function toggleDarkMode() {
-      document.body.classList.toggle('light');
+      document.body.classList.toggle('dark');
     }
-
-    /************************************************
-     * 2) Notifications
-     ************************************************/
+    // Notifications
     function showNotifications() {
-      alert('No new notifications');
+      alert("No new notifications!");
     }
-
-    /************************************************
-     * 3) Back to Top
-     ************************************************/
-    const backToTopBtn = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-      backToTopBtn.style.display = window.pageYOffset > 300 ? 'block' : 'none';
-    });
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Filter cards based on search input
+    function filterCards() {
+      const input = document.getElementById('search-bar').value.toLowerCase();
+      const cards = document.querySelectorAll('.card, .box');
+      cards.forEach(function(card) {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(input) ? 'flex' : 'none';
+      });
+    }
+    // Function to open modal with details
+    function openDetails(button) {
+      const parent = button.parentElement;
+      let title = parent.querySelector('h3') ? parent.querySelector('h3').innerText : "Details";
+      let content = parent.querySelector('p').innerText;
+      document.getElementById('modalDetails').innerHTML = `<h2>${title}</h2><p>${content}</p>`;
+      document.getElementById('detailsModal').style.display = 'block';
+    }
+    // Function to close modal
+    function closeModal() {
+      document.getElementById('detailsModal').style.display = 'none';
     }
   </script>
 </body>

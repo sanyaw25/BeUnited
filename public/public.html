@@ -171,8 +171,12 @@
       window.location.href = 'login.html';
     }
 
+    // Check if student or moderator data is in localStorage
     const student = JSON.parse(localStorage.getItem('studentData'));
     const moderator = JSON.parse(localStorage.getItem('moderatorData'));
+
+    console.log(student); // For debugging
+    console.log(moderator); // For debugging
 
     const title = document.getElementById('profileTitle');
     const content = document.getElementById('profileContent');

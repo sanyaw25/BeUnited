@@ -2,192 +2,199 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Student Profile | Be United</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeUnited – Student Profile</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
   <style>
-    :root {
-      --primary-color: #BB86FC;
-      --secondary-color: #5790c5;
-      --accent-color: #CF6679;
-      --header-gradient: linear-gradient(135deg, #1E1E2F, #2A2A3D);
-      --nav-bg: #484876;
-      --container-bg: rgba(36,37,42,0.9);
-      --body-bg: linear-gradient(135deg, #1E1E2F, #12121F);
-      --text-color: #E0E0E0;
-      --card-shadow: 0 6px 12px rgba(0,0,0,0.5);
-      --highlight-color: #BB86FC;
-    }
-
-    body.light {
-      --primary-color: #4A90E2;
-      --secondary-color: #50E3C2;
-      --accent-color: #F5A623;
-      --header-gradient: linear-gradient(135deg, #4A90E2, #85e8d2);
-      --nav-bg: #f1f1f1;
-      --container-bg: #e5f5ff;
-      --body-bg: linear-gradient(135deg, #ECF0F1, #FFFFFF);
-      --text-color: #333333;
-      --card-shadow: 0 6px 12px rgba(0,0,0,0.1);
-      --highlight-color: #4A90E2;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--body-bg);
-      color: var(--text-color);
-      transition: all 0.4s ease;
-    }
-
-    header {
-      background: var(--header-gradient);
-      color: var(--text-color);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: var(--card-shadow);
-    }
-
-    .header-title {
-      font-size: 1.8rem;
-      font-weight: bold;
-    }
-
-    .header-icons {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .header-icons button {
-      background: none;
-      color: var(--text-color);
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    nav {
-      background-color: var(--nav-bg);
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 0.8rem;
-      box-shadow: var(--card-shadow);
-    }
-
-    nav a {
-      color: var(--text-color);
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: var(--container-bg);
-      border-radius: 12px;
-      box-shadow: var(--card-shadow);
-    }
-
-    h1 {
-      text-align: center;
-      color: var(--highlight-color);
-    }
-
-    .profile-info p {
-      font-size: 1.1rem;
-      margin: 0.8rem 0;
-    }
-
-    .logout-btn {
-      margin-top: 2rem;
-      padding: 0.8rem 1.5rem;
-      background-color: var(--accent-color);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-    .logout-btn:hover {
-      opacity: 0.85;
-    }
-
-    .bell-icon {
-      cursor: pointer;
-      font-size: 1.2rem;
-    }
+    :root { --primary-color:#BB86FC; --secondary-color:#5790c5; --accent-color:#CF6679; --pink:#FF77A9; --header-gradient:linear-gradient(135deg,#1E1E2F,#2A2A3D); --nav-bg:#484876; --container-bg:rgba(36,37,42,0.9); --body-bg:linear-gradient(135deg,#1E1E2F,#12121F); --text-color:#E0E0E0; --card-shadow:0 6px 12px rgba(0,0,0,0.5); --highlight-color:#BB86FC; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Roboto',sans-serif;background:var(--body-bg);color:var(--text-color);min-height:100vh;display:flex;flex-direction:column;}
+    header{background:var(--header-gradient);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 10px rgba(0,0,0,0.3);}
+    .brand{font-size:28px;font-weight:700;color:#fff;}
+    .logout-btn{background:var(--accent-color);color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;transition:background .3s;}
+    .logout-btn:hover{background:var(--highlight-color)}
+    nav{background:var(--nav-bg);padding:12px;display:flex;justify-content:center;gap:16px;}
+    nav a{color:var(--primary-color);text-decoration:none;padding:8px 16px;border-radius:6px;font-weight:500;transition:background .3s,color .3s;}
+    nav a:hover{background:var(--primary-color);color:#fff}
+    main{flex:1;display:flex;justify-content:center;align-items:flex-start;padding:40px 20px;}
+    .profile-card{width:100%;max-width:600px;background:var(--container-bg);backdrop-filter:blur(12px);border-radius:12px;box-shadow:var(--card-shadow);transition:transform .3s,box-shadow .3s;overflow:hidden}
+    .profile-card:hover{transform:translateY(-5px);box-shadow:0 12px 24px rgba(0,0,0,0.6)}
+    .profile-header{background:var(--primary-color);padding:24px;text-align:center}
+    .profile-header h2{font-size:26px;color:#fff;margin-bottom:6px;text-transform:uppercase;cursor:text}
+    .profile-header p{font-size:14px;color:#ddd;cursor:text}
+    .profile-body{padding:24px}
+    .about-me h3,.skills-section h3{font-size:18px;color:var(--primary-color);margin-bottom:8px}
+    .about-me div{background:rgba(255,255,255,0.05);padding:12px;border-radius:6px;min-height:60px;cursor:text}
+    .about-me div:focus{background:rgba(255,255,255,0.1);outline:2px dashed rgba(255,255,255,0.6)}
+    .social-links{display:flex;gap:16px;margin-bottom:24px}
+    .social-links a{color:var(--text-color);font-size:20px;text-decoration:none;cursor:pointer}
+    .social-links a:hover{color:var(--pink)}
+    .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px}
+    .contact-item{display:flex;align-items:center;background:rgba(255,255,255,0.05);padding:10px 14px;border-left:4px solid var(--pink);border-radius:6px}
+    .contact-item svg{width:18px;height:18px;fill:var(--pink);margin-right:8px}
+    .label{font-size:12px;font-weight:600;color:var(--pink);margin-right:4px}
+    .value{font-size:14px;color:var(--text-color)}
+    .copy-btn{margin-left:auto;cursor:pointer;font-size:16px}
+    .skills-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+    .skill-badge{background:rgba(255,255,255,0.1);padding:6px 12px;border-radius:12px;font-size:13px;position:relative}
+    .skill-badge .remove{position:absolute;top:-4px;right:-4px;background:var(--pink);color:#fff;width:16px;height:16px;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .add-skill{display:flex;gap:8px;margin-bottom:24px}
+    .add-skill input{flex:1;padding:6px 10px;border:1px solid var(--primary-color);border-radius:6px;background:transparent;color:var(--text-color)}
+    .add-skill button{padding:6px 14px;background:var(--pink);border:none;border-radius:6px;color:#fff;cursor:pointer}
+    .upload-section{margin-bottom:24px;display:flex;flex-direction:column;align-items:center;gap:12px}
+    #resume-dropzone{width:100%;padding:20px;border:2px dashed var(--primary-color);border-radius:6px;text-align:center;cursor:pointer;transition:border-color .3s}
+    #resume-dropzone.dragover{border-color:var(--highlight-color)}
+    #pdf-preview{width:100%;max-height:300px;border:1px solid rgba(255,255,255,0.2);border-radius:6px}
+    .upload-buttons{display:flex;gap:12px}
+    .upload-buttons a,.upload-buttons button{padding:8px 16px;border:none;border-radius:6px;font-size:14px;cursor:pointer}
+    .upload-buttons .download{background:var(--secondary-color);color:#fff;display:none}
+    .upload-buttons .reset{background:transparent;border:1px solid var(--pink);color:var(--pink)}
+    #backToTop{position:fixed;bottom:24px;right:24px;background:var(--primary-color);color:#fff;border:none;padding:10px;border-radius:50%;cursor:pointer;display:none}
+    @media(max-width:480px){.profile-header h2{font-size:22px}.profile-header p{font-size:12px}}
   </style>
 </head>
 <body>
   <header>
-    <div class="header-title">BeUnited</div>
-    <div class="header-icons">
-      <button onclick="toggleDarkMode()" id="themeToggle">🌙</button>
-      <span class="bell-icon" onclick="showNotifications()">🔔</span>
-      <a href="student-profile.html">Profile</a>
-    </div>
+    <div class="brand">BeUnited</div>
+    <button id="logout" class="logout-btn">Logout</button>
   </header>
-
   <nav>
     <a href="./index.html">Clubs &amp; Chapters</a>
     <a href="./ra-positions.html">Research &amp; Projects</a>
     <a href="./entrepreneur-openings.html">Startup &amp; Internships</a>
     <a href="./workshops.html">Workshops &amp; Events</a>
   </nav>
-
-  <div class="container">
-    <h1>Student Profile</h1>
-    <div class="profile-info">
-      <p><strong>Name:</strong> <span id="studentName"></span></p>
-      <p><strong>Email:</strong> <span id="studentEmail"></span></p>
-      <p><strong>University:</strong> <span id="studentUniversity"></span></p>
-      <p><strong>Year:</strong> <span id="studentYear"></span></p>
-      <p><strong>Resume URL:</strong> <a href="#" id="resumeLink" target="_blank">View Resume</a></p>
+  <main>
+    <div class="profile-card">
+      <div class="profile-header">
+        <h2 id="name" contenteditable></h2>
+        <p id="title" contenteditable>Computer Science | Class of 2026</p>
+      </div>
+      <div class="profile-body">
+        <div class="about-me">
+          <h3>About Me</h3>
+          <div id="about" contenteditable>Click here to write a short bio…</div>
+        </div>
+        <div class="social-links">
+          <a id="linkedin" title="Set LinkedIn URL">🔗 LinkedIn</a>
+          <a id="github" title="Set GitHub URL">💻 GitHub</a>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <svg viewBox="0 0 512 512"><path/></svg>
+            <div><span class="label">Email:</span><span id="email" class="value"></span><span class="copy-btn" onclick="copyToClipboard('email')">📋</span></div>
+          </div>
+          <div class="contact-item">
+            <svg viewBox="0 0 512 512"><path/></svg>
+            <div><span class="label">Phone:</span><span id="phone" class="value"></span><span class="copy-btn" onclick="copyToClipboard('phone')">📋</span></div>
+          </div>
+        </div>
+        <div class="skills-section">
+          <h3>Skills</h3>
+          <div id="skills-list" class="skills-grid"></div>
+        </div>
+        <div class="add-skill">
+          <input id="new-skill" placeholder="Add a skill…" />
+          <button onclick="addSkill()">Add</button>
+        </div>
+        <div class="upload-section">
+          <div id="resume-dropzone">Drop PDF here or click to upload</div>
+          <input id="resume-upload" type="file" accept="application/pdf" />
+          <canvas id="pdf-preview"></canvas>
+          <div class="upload-buttons">
+            <a id="download-resume" class="download" href="#" download>Download</a>
+            <button class="reset" onclick="resetProfile()">Reset</button>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </div>
-
+  </main>
+  <button id="backToTop">⇧</button>
   <script>
-    // Theme toggle on load
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-      document.body.classList.add('light');
-      document.getElementById('themeToggle').textContent = '☀️';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // UI initialization
+      loadSkills(); window.addEventListener('scroll', handleScroll);
+      document.getElementById('backToTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      document.getElementById('logout').addEventListener('click', () => window.location.href = 'login.html');
+
+      // Load stored social URLs
+      const ln = localStorage.getItem('linkedinURL');
+      const gh = localStorage.getItem('githubURL');
+      const lnEl = document.getElementById('linkedin');
+      const ghEl = document.getElementById('github');
+      if (ln) lnEl.href = ln;
+      if (gh) ghEl.href = gh;
+
+      // Prompt on click to set URL if not exist
+      lnEl.addEventListener('click', e => {
+        e.preventDefault();
+        let url = prompt('Enter your LinkedIn profile URL:', ln || '');
+        if (url) { localStorage.setItem('linkedinURL', url); lnEl.href = url; window.open(url, '_blank'); }
+      });
+      ghEl.addEventListener('click', e => {
+        e.preventDefault();
+        let url = prompt('Enter your GitHub profile URL:', gh || '');
+        if (url) { localStorage.setItem('githubURL', url); ghEl.href = url; window.open(url, '_blank'); }
+      });
+
+      // PDF upload handlers
+      const dropzone = document.getElementById('resume-dropzone');
+      const fileInput = document.getElementById('resume-upload');
+      dropzone.addEventListener('click', () => fileInput.click());
+      ['dragover', 'dragleave', 'drop'].forEach(evt => {
+        dropzone.addEventListener(evt, ev => {
+          ev.preventDefault(); dropzone.classList.toggle('dragover', evt === 'dragover');
+          if (evt === 'drop') { fileInput.files = ev.dataTransfer.files; handleFile(); }
+        });
+      });
+      fileInput.addEventListener('change', handleFile);
+    });
+
+    function handleScroll() { document.getElementById('backToTop').style.display = window.pageYOffset > 200 ? 'block' : 'none'; }
+
+    // Skills
+    function loadSkills() {
+      const s = JSON.parse(localStorage.getItem('studentSkills') || '[]');
+      document.getElementById('skills-list').innerHTML = s.map(x => `<div class="skill-badge">${x}<span class="remove" onclick="removeSkill('${x}')">×</span></div>`).join('');
     }
+    function addSkill() {
+      const i = document.getElementById('new-skill'), v = i.value.trim(); if (!v) return;
+      let arr = JSON.parse(localStorage.getItem('studentSkills') || '[]'); if (arr.includes(v)) return alert('Already added');
+      arr.push(v); localStorage.setItem('studentSkills', JSON.stringify(arr)); i.value = ''; loadSkills(); }
+    function removeSkill(k) { let arr = JSON.parse(localStorage.getItem('studentSkills') || '[]'); arr = arr.filter(x => x !== k); localStorage.setItem('studentSkills', JSON.stringify(arr)); loadSkills(); }
 
-    function toggleDarkMode() {
-      document.body.classList.toggle('light');
-      const isLight = document.body.classList.contains('light');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-      document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
-    }
+    function copyToClipboard(id) { navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => alert('Copied!')); }
+    function resetProfile() {
+      localStorage.removeItem('studentSkills'); document.getElementById('resume-upload').value = '';
+      const c = document.getElementById('pdf-preview'); c.getContext('2d').clearRect(0,0,c.width,c.height);
+      document.getElementById('download-resume').style.display = 'none'; ['email','phone','name'].forEach(id => document.getElementById(id).textContent = ''); loadSkills(); }
 
-    function showNotifications() {
-      alert("You have no new notifications 📬");
-    }
-
-    function logout() {
-      localStorage.removeItem('studentData');
-      window.location.href = 'login.html';
-    }
-
-    const student = JSON.parse(localStorage.getItem('studentData'));
-
-    if (!student) {
-      alert('Please login first');
-      window.location.href = 'login.html';
-    } else {
-      document.getElementById('studentName').textContent = student.name;
-      document.getElementById('studentEmail').textContent = student.email;
-      document.getElementById('studentUniversity').textContent = student.university;
-      document.getElementById('studentYear').textContent = student.year;
-      document.getElementById('resumeLink').href = student.resumeURL;
+    async function handleFile() {
+      const f = document.getElementById('resume-upload').files[0]; if (!f || f.type !== 'application/pdf') return alert('Upload a PDF');
+      const buf = await f.arrayBuffer(); const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      let text = '';
+      for (let i = 1; i <= pdf.numPages; i++) { const pg = await pdf.getPage(i); const ct = await pg.getTextContent(); text += ct.items.map(it => it.str).join('\n') + '\n'; }
+      const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+      const email = (text.match(/[\w.+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/) || [''])[0];
+      const phone = (text.match(/(\+?\d[\d\s-]{7,}\d)/) || [''])[0];
+      let name = '';
+      const invalid = /(email|linkedin|github|contact|phone|resume|curriculum|summary)/i;
+      for (let i = 0; i < Math.min(8, lines.length); i++) {
+        const c = lines[i], wc = c.split(/\s+/).length;
+        if (c.length <= 60 && /^[A-Za-z\s.'-]+$/.test(c) && !invalid.test(c) && !/\d/.test(c) && wc >= 2 && wc <= 4) { name = c; break; }
+      }
+      if (!name && email) { const idx = lines.findIndex(l => l.includes(email)); if (idx > 0) { const c = lines[idx - 1]; if (c && /^[A-Za-z\s.'-]+$/.test(c) && !invalid.test(c) && !/\d/.test(c) && c.length <= 60) name = c; } }
+      document.getElementById('name').textContent = name;
+      document.getElementById('email').textContent = email;
+      document.getElementById('phone').textContent = phone;
+      const known = ['python','html','css','javascript','sql','react','aws','azure','kubernetes','devops'];
+      const skills = known.filter(k => text.toLowerCase().includes(k)); localStorage.setItem('studentSkills', JSON.stringify(skills)); loadSkills();
+      const page = await pdf.getPage(1); const vp = page.getViewport({ scale: 1 }); const canvas = document.getElementById('pdf-preview'); canvas.width = vp.width; canvas.height = vp.height;
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+      const dl = document.getElementById('download-resume'); dl.href = URL.createObjectURL(f); dl.style.display = 'inline-block';
     }
   </script>
 </body>
