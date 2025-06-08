@@ -4,8 +4,9 @@
 Repository for the **Design Thinking & Innovation** course project at **Bennett University**.
 
 ## Login
-For moderators: mod@example.com, mod1234
-For students: student1@example.com, testpassword123
+
+1. For moderators: mod@example.com, mod1234
+2. For students: student1@example.com, testpassword123
 
 ## 💡 Project Overview
 
